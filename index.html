@@ -1,0 +1,98 @@
+<html>
+<head>
+	<title>Kickstarter Countown</title>
+	<link rel="stylesheet" href="main.css" type="text/css"/>
+</head>
+<body>
+	<div class="main-background">
+		<span class="back"><a href="http://hackgfs.io">&larr; Back</a></span>
+		<div class="center">
+			<div class="sup-container">
+				<span class="subtext">hackGFS Kickstarter</a></span>
+			</div>
+			<div class="time">
+				<div class="time-section">
+					<span class="countdown" id="days">--</span><br>
+					<span class="countdown-label">D</span>
+				</div>
+				<div class="time-section">
+					<span class="countdown">:</span>
+				</div>
+				<div class="time-section">
+					<span class="countdown" id="hours">--</span><br>
+					<span class="countdown-label">H</span>
+				</div>
+				<div class="time-section">
+					<span class="countdown">:</span>
+				</div>
+				<div class="time-section">
+					<span class="countdown" id="minutes">--</span><br>
+					<span class="countdown-label">M</span>
+				</div>
+				<div class="time-section">
+					<span class="countdown">:</span>
+				</div>
+				<div class="time-section">
+					<span class="countdown" id="seconds">--</span><br>
+					<span class="countdown-label">S</span>
+				</div>
+			</div>
+			<div class="sub-container">
+				<span class="subtext"><span id="funded">--%</span> Funded | <a target="_blank" href="https://www.kickstarter.com/projects/404243180/hackgfs/pledge/new">Donate Now!</a></span>
+			</div>
+		</div>
+		<!--<div class="meter"></div>-->
+	</div>
+
+	<script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+	<script type="text/javascript">
+		var html;
+		$.get("https://www.kickstarter.com/projects/404243180/hackgfs", function(data){
+     		html = $(data).find("[itemprop='Project[pledged]']").html();
+     		var number = parseInt(html.replace('$', '').replace(',', ''))
+     		var funded = Math.floor(number/6000*100) + "%"
+     		document.getElementById("funded").innerHTML = funded
+ 		});
+		var deadline = 'Sun, Mar 27 2016 8:30 AM EDT';
+
+		var days = document.getElementById("days");
+		var house = document.getElementById("hours");
+		var minutes = document.getElementById("minutes");
+		var seconds = document.getElementById("seconds");
+
+		var time = getTimeRemaining(deadline);
+		days.innerHTML = time.days
+		hours.innerHTML = time.hours
+		minutes.innerHTML = time.minutes
+		seconds.innerHTML = time.seconds
+  		var timeinterval = setInterval(function(){
+    		var time = getTimeRemaining(deadline);
+    		days.innerHTML = time.days
+    		hours.innerHTML = time.hours
+    		minutes.innerHTML = time.minutes
+    		seconds.innerHTML = time.seconds
+  		},1000);
+
+		function getTimeRemaining(endtime){
+			var t = Date.parse(endtime) - Date.parse(new Date());
+			var seconds = Math.floor( (t/1000) % 60 );
+			var minutes = Math.floor( (t/1000/60) % 60 );
+			var hours = Math.floor( (t/(1000*60*60)) % 24 );
+			var days = Math.floor( t/(1000*60*60*24) );
+			return {
+				'days': days,
+				'hours': addTrailingZero(hours),
+				'minutes': addTrailingZero(minutes),
+				'seconds': addTrailingZero(seconds)
+			};
+		}
+
+		function addTrailingZero(number) {
+			if (number < 10) {
+				return '0' + number;
+			}
+			return number;
+		}
+	</script>
+</body>
+</html>
